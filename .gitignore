@@ -1,12 +1,6 @@
-# Python
-backend/venv/
-backend/*.pyc
-backend/__pycache__/
-backend/db.sqlite3
-backend/.env
-backend/staticfiles/
-
-# System / IDE
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
 .DS_Store
-.vscode/
-.idea/

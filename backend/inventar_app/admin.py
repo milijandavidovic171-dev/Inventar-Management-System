@@ -13,7 +13,7 @@ class ArtikelAdmin(admin.ModelAdmin):
     list_filter = ('standort',)
 
 
-# 2. Registrierung für deine Portfolio-Daten (Profil)
+# 2. Registrierung für Portfolio-Daten (Profil)
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     """
@@ -22,7 +22,6 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'titel', 'standort', 'email')
 
     # Verhindert, dass man versehentlich mehrere Profile anlegt,
-    # da du für die Webseite nur eines brauchst.
     def has_add_permission(self, request):
         if Profile.objects.exists():
             return False

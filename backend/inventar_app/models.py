@@ -23,7 +23,7 @@ class Artikel(models.Model):
         ordering = ['-id']
 
 
-# WICHTIG: Diese Klasse MUSS ganz links am Rand starten (keine Einrückung!)
+
 class Profile(models.Model):
     """
     Modell für deine persönlichen Daten auf der Portfolio-Webseite.

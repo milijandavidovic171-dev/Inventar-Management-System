@@ -15,7 +15,7 @@ engine = create_engine(sqlite_url, connect_args={"check_same_thread": False})
 
 # --- DATENMODELL (SQLModel) ---
 class Artikel(SQLModel, table=True):
-    # Wir nutzen "artikel", da dies in deiner Binärdatei sichtbar war
+    
     __tablename__ = "artikel"
     __table_args__ = {"extend_existing": True}
 

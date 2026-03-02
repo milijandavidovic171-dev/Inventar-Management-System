@@ -9,7 +9,6 @@ class BaseFrame(ttk.Frame):
         super().__init__(master)
         self.app = app_instance
         self.title_label = ttk.Label(self, text=title, font=("Arial", 16, "bold"))
-        # Hier nutzen wir pack, weil es nur der Titelcontainer ist, der Rest nutzt grid
         self.title_label.pack(pady=10)
 
 
@@ -440,8 +439,6 @@ class RetourenWindow(BaseFrame):
     def process_retoure(self):
         artikel_id = self.artikel_input.get().strip()
         menge_str = self.menge_input.get().strip()
-        # Grund wird aktuell nur erfasst, aber noch nicht in einer Historie gespeichert
-        # Das wäre ein guter nächster Schritt für die Transaktions-Tabelle!
         grund = self.grund_input.get().strip()
 
         if not artikel_id or not menge_str:
