@@ -1,0 +1,121 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>M. Davidovic - Webport IMS</title>
+    <link rel="stylesheet" href="{% static 'ims_style.css' %}" />
+  </head>
+  <body>
+    <div class="window">
+      <div class="title-bar">
+        <span>Milijan Davidovic - IMS Web-Port v1.0</span>
+        <div style="display: flex; gap: 5px">
+          <span>_</span>
+          <span>□</span>
+          <span
+            style="
+              background: #c0c0c0;
+              color: #800000;
+              border: 1px solid white;
+              padding: 0 3px;
+            "
+          >
+            x
+          </span>
+        </div>
+      </div>
+
+      <div class="app-body">
+        <div class="sidebar">
+          <button class="nav-btn active" onclick="switchTab('portfolio', this)">
+            🏠 Profil
+          </button>
+          <button class="nav-btn" onclick="switchTab('ims', this)">
+            📦 Lager
+          </button>
+          <button class="nav-btn" onclick="switchTab('add', this)">
+            ➕ Neu
+          </button>
+        </div>
+
+        <div class="main-content">
+          <div id="tab-portfolio">
+            <h2>Willkommen</h2>
+            <div class="tk-frame">
+              <p id="bio-text">{{ profile.bio|default:"Lade..." }}</p>
+            </div>
+          </div>
+
+          <div id="tab-ims" style="display: none">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <h2>Lagerbestand</h2>
+              <input
+                type="text"
+                id="search-box"
+                class="tk-input"
+                placeholder="Suche..."
+                oninput="handleSearch()"
+              />
+            </div>
+            <div class="treeview-container">
+              <table class="treeview-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Nr.</th>
+                    <th>Menge</th>
+                    <th>Aktion</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-list"></tbody>
+              </table>
+            </div>
+            <p id="stats-label"></p>
+          </div>
+
+          <div id="tab-add" style="display: none">
+            <h2>Neuer Artikel</h2>
+            <div class="tk-frame">
+              <input
+                type="text"
+                id="in-name"
+                class="tk-input"
+                placeholder="Bezeichnung"
+              />
+              <br />
+              <br />
+              <input
+                type="text"
+                id="in-nr"
+                class="tk-input"
+                placeholder="Artikel-Nr"
+              />
+              <br />
+              <br />
+              <input type="number" id="in-menge" class="tk-input" value="0" />
+              <br />
+              <br />
+              <button class="tk-button" onclick="submitNewItem()">
+                Speichern
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <span>Status: Bereit.</span>
+        <span id="clock">00:00:00</span>
+      </div>
+    </div>
+
+    <script src="{% static 'ims.js' %}"></script>
+  </body>
+</html>

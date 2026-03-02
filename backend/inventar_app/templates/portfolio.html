@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ profile.name|default:"Inventar Dashboard" }}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="{% static 'portfolio_style.css' %}" />
+  </head>
+  <body class="p-4 md:p-8 font-sans antialiased">
+    <div
+      id="toast-container"
+      class="fixed top-5 right-5 z-[100] space-y-3 w-80"
+    ></div>
+
+    {% if profile %}
+    <div class="max-w-6xl mx-auto space-y-8">
+      <div
+        class="glass p-8 rounded-[2.5rem] relative overflow-hidden flex flex-col md:flex-row items-center gap-8 shadow-2xl"
+      >
+        <div
+          class="absolute top-6 right-6 flex items-center gap-3 px-4 py-2 glass rounded-full border border-white/5"
+        >
+          <div id="status-dot" class="w-3 h-3 rounded-full bg-slate-500"></div>
+          <span
+            id="status-text"
+            class="text-[10px] font-bold uppercase text-slate-400 tracking-widest"
+          >
+            Initialisiere...
+          </span>
+        </div>
+        <div
+          class="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl rotate-2"
+        >
+          <img
+            src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ profile.name }}"
+            alt="Profil"
+          />
+        </div>
+        <div class="text-center md:text-left">
+          <h1 class="text-4xl md:text-5xl font-black mb-2 tracking-tight">
+            {{ profile.name }}
+          </h1>
+          <p class="text-slate-400 text-xl font-light italic">
+            {{ profile.titel }}
+          </p>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div
+          class="glass p-8 rounded-[2rem] border border-white/5 h-fit sticky top-8"
+        >
+          <h3 class="font-bold text-sky-400 mb-6 flex items-center text-lg">
+            <i class="fas fa-plus-circle mr-3"></i>
+            Neuer Artikel
+          </h3>
+          <div class="space-y-4">
+            <input
+              type="text"
+              id="in-name"
+              placeholder="Name"
+              class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none"
+            />
+            <input
+              type="text"
+              id="in-nr"
+              placeholder="Artikel-Nr."
+              class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none"
+            />
+            <input
+              type="number"
+              id="in-menge"
+              value="0"
+              class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none"
+            />
+            <button
+              onclick="handleSave()"
+              class="w-full accent-gradient py-3 rounded-xl font-bold shadow-lg text-sm uppercase"
+            >
+              Speichern
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="lg:col-span-2 glass p-8 rounded-[2rem] border border-white/5"
+        >
+          <div
+            class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4"
+          >
+            <h3 class="text-xl font-bold text-emerald-400 flex items-center">
+              <i class="fas fa-warehouse mr-3"></i>
+              Bestand
+              <span
+                id="total-stock"
+                class="ml-4 text-xs bg-white/10 px-2 py-1 rounded text-slate-300"
+              >
+                0 Einheiten
+              </span>
+            </h3>
+            <div class="flex gap-4 w-full sm:w-auto">
+              <input
+                type="text"
+                id="search-input"
+                oninput="handleSearch()"
+                placeholder="Suche..."
+                class="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:border-emerald-500 outline-none flex-1"
+              />
+              <button
+                onclick="loadInventory()"
+                class="p-2 glass rounded-lg text-slate-400"
+              >
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+          <div id="item-list" class="space-y-4"></div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <script src="{% static 'portfolio_logic.js' %}"></script>
+  </body>
+</html>

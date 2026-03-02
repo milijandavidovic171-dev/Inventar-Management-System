@@ -1,0 +1,33 @@
+/* Portfolio Styles - Glassmorphism Design */
+
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+
+.glass {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.accent-gradient {
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+}
+
+/* Animation für kritischen Bestand */
+.danger-pulse {
+    animation: danger-blink 1.5s infinite;
+}
+
+@keyframes danger-blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}

@@ -1,0 +1,131 @@
+/* Vavilla CSS LOOK: Farben definieren wie in Python */
+:root {
+    --tk-gray: #d9d9d9;
+    --tk-blue: #000080;
+    --tk-white: #ffffff;
+    --tk-shadow: #808080;
+    --tk-deep: #404040;
+    --highlight: #3498db;
+}
+
+body {
+    background-color: #1e1e1e;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.window {
+    background-color: var(--tk-gray);
+    width: 1100px;
+    height: 750px;
+    border: 2px solid var(--tk-white);
+    border-right-color: var(--tk-deep);
+    border-bottom-color: var(--tk-deep);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+
+.title-bar {
+    background: linear-gradient(90deg, var(--tk-blue), #1084d0);
+    color: white;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar {
+    width: 180px;
+    background-color: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nav-btn.active {
+    background-color: #3498db;
+    font-weight: bold;
+}
+
+.main-content {
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 25px;
+    overflow-y: auto;
+}
+
+.tk-frame {
+    border: 2px solid var(--tk-deep);
+    border-right: 2px solid var(--tk-white);
+    border-bottom: 2px solid var(--tk-white);
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: var(--tk-gray);
+}
+
+.tk-input {
+    border: 2px solid var(--tk-deep);
+    padding: 4px;
+    width: 250px;
+    background: white;
+}
+
+.tk-button {
+    background-color: var(--tk-gray);
+    border: 2px solid var(--tk-white);
+    border-right: 2px solid var(--tk-deep);
+    border-bottom: 2px solid var(--tk-deep);
+    padding: 6px 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.treeview-container {
+    height: 400px;
+    background: white;
+    border: 2px solid var(--tk-deep);
+    overflow-y: auto;
+}
+
+.treeview-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.treeview-table th {
+    background: #e0e0e0;
+    position: sticky;
+    top: 0;
+    padding: 5px;
+}
+
+.treeview-table td {
+    border: 1px solid #eeeeee;
+    padding: 5px;
+}
+
+.status-bar {
+    background: var(--tk-gray);
+    border-top: 1px solid var(--tk-deep);
+    padding: 2px 10px;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+}
