@@ -1,6 +1,17 @@
+# Python temporäre Dateien
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.db
+
+# Datenbanken (optional - falls du sie nicht im Git haben willst)
+# *.db
+# *.sqlite3
+
+# OS spezifisch
 .DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
