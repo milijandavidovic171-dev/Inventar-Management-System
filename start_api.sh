@@ -4,10 +4,10 @@
 cd "$(dirname "$0")"
 
 # 2. Die virtuelle Umgebung aktivieren
-if [ -f "Linux/bin/activate" ]; then
-    source Linux/bin/activate
+if [ -f "Debian_Venv/bin/activate" ]; then
+    source Debian_Venv/bin/activate
 else
-    echo "⚠️ Venv 'Linux' nicht gefunden!"
+    echo "⚠️ Venv 'Debian_Venv' nicht gefunden!"
 fi
 
 # 3. In den Backend-Ordner springen

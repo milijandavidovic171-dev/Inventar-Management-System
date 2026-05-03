@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadTable Training - Formular</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+        }
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            margin: 40px auto;
+        }
+        #charCounter {
+            transition: color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+      <div class="form-card">
+        <h2 class="text-2xl font-bold text-blue-600 mb-6">Neue Anfrage</h2>
+        
+        <div class="space-y-4">
+            <div class="relative">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="block text-sm font-semibold text-gray-700">Vollständiger Name</label>
+                    <span id="charCounter" class="text-xs font-mono text-gray-400">0/20</span>
+                </div>
+                <input type="text" id="name" oninput="updateCounter()" placeholder="Vorname Nachname" 
+                       class="block w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Email Adresse</label>
+                <input type="email" id="email" oninput="validateEmail()" placeholder="max@beispiel.de" 
+                       class="block w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Telefonnummer</label>
+                <input type="tel" id="tel" placeholder="+49 0151..." 
+                       class="block w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Nachricht</label>
+                <textarea id="message" rows="3" placeholder="Wie können wir helfen?" 
+                          class="block w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+            </div>
+            
+            <button onclick="handleLeadSubmission()"
+                    class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 active:scale-[0.98] transition-all shadow-md">
+                Daten an LeadTable senden
+            </button>
+        </div>
+
+        <div id="feedback" class="mt-4 p-3 rounded-md hidden text-sm font-medium"></div>
+
+        <div id="status" class="mt-6 p-4 bg-gray-900 rounded-lg hidden">
+            <strong class="text-blue-400 text-xs uppercase tracking-widest">JSON Output:</strong>
+            <pre id="json-output" class="text-green-400 text-xs mt-2 overflow-x-auto"></pre>
+        </div>
+    </div>
+
+    <div class="max-w-450px mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Eingegagene Leads</h3>
+        <ul id="leadList" class="space-y-3">
+            <p id="noLeadsHint" class="text-gray-400 text-sm italic">Noch keine Leads vorhadnen...</p>
+        </ul>
+    </div>
+
+    <script>
+    // Das ist wie das Laden einer .json Datei in Python, aber hier in JavaScript. Es holt die gespeicherten Leads aus dem Local Storage oder startet mit einer leeren Liste.
+    // Wir holen den String aus dem localStorage und wandeln ihn zurück in ein Array von Objekten. Wenn es noch nichts gibt, starten wir mit einem leeren Array.
+    let allLeads = JSON.parse(localStorage.getItem('myLeads')) || [];
+
+    // Sobald die Seite geladen ist, rufen wir die Funktion auf, die die Leads anzeigt. Das sorgt dafür, dass auch nach einem Neuladen der Seite alle gespeicherten Leads sichtbar bleiben.
+    window.onload = function() {
+        renderLeads();
+    }
+
+        function renderLeads() {
+            const list = document.getElementById('leadList');
+            const noLeadsHint = document.getElementById('noLeadsHint');
+
+            // Zuerst die Liste leeren, damit wir nichts doppelt anzeigen
+            list.innerHTML = "";
+
+            if (allLeads.length === 0) {
+                noLeadsHint.classList.remove('hidden');
+                return;
+            }
+            
+            noLeadsHint.classList.add('hidden');
+        
+            // Jetzt der "Python-Loop"
+            allLeads.forEach((lead, index) => {
+                // Hier nutzen wir jetzt die logische Bauweise von vorhin!
+                const newEntry = document.createElement('li');
+                newEntry.className = "bg-white p-4 rounded-lg border-l-4 border-blue-500 shadow-sm mb-3 flex justify-between items-center";
+
+                newEntry.innerHTML = `
+                <div>
+                    <p class="font-bold text-gray-800">${lead.name}</p>
+                    <p class="text-xs text-gray-500">${lead.email}</p>
+                </div>
+                <button onclick="deleteLead(${index})" class="text-red-500 text-xs font-bold">Löschen</button>
+                `;
+                list.prepend(newEntry);
+            });
+        }
+
+        function handleLeadSubmission() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const tel = document.getElementById('tel').value;
+            const message = document.getElementById('message').value;
+
+            // Validierung (wie gehabt)
+            if (name.length < 3 || !email.includes("@")) {
+                showFeedback("❌ Name (min. 3 Zeichen) oder ungültige E-Mail-Adresse!", "bg-red-100 text-red-700");
+                return;
+            }
+
+            // 1. Das neue Daten-Objekt (Der "Lead") erstellen
+            const newLead = {
+                name: name,
+                email: email,
+                tel: tel,
+                text: message,
+                timestamp: new Date().toLocaleString()
+            };
+
+            // 2. Ins Array pushen (Python: allLeads.append(newLead))
+            allLeads.push(newLead);
+
+            //3. Im Local Storage speichern (Als String, deswegen JSON.stringify)
+            localStorage.setItem('myLeads', JSON.stringify(allLeads));
+
+            // 4. Die Anzeige aktualisieren, damit der neue Lead sofort sichtbar wird
+            renderLeads();
+
+            // 5. Formualar zurücksetzen, damit es bereit für den nächsten Lead ist
+            document.getElementById('name').value = "";
+            document.getElementById('email').value = "";
+            document.getElementById('tel').value = "";
+            document.getElementById('message').value = "";
+        }
+
+
+        function deleteLead(index) {
+            allLeads.splice(index, 1);
+            localStorage.setItem('myLeads', JSON.stringify(allLeads));
+            renderLeads();
+        }
+
+        function updateCounter() {
+            const nameInput = document.getElementById('name');
+            const counter = document.getElementById('charCounter');
+            counter.innerText = `${val.length}/20`;
+            counter.style.color = (val.length > 20 || val.length < 3) ? "red" : "gray";
+        }
+
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const emailValue = emailInput.value;
+
+            // Einfache Prüfung: Enthält es ein @?
+            if (emailValue.includes("@") || emailValue === "") {
+                emailInput.classList.remove('border-red-500', 'ring-red-500');
+                emailInput.classList.add('border-gray-300');
+            } else {
+                emailInput.classList.remove('border-gray-300');
+                emailInput.classList.add('border-red-500', 'ring-2', 'ring-red-500');
+            }
+        }
+
+
+        function showFeedback(text, colorClasses) {
+            const fb = document.getElementById('feedback');
+            fb.innerText = text;
+            fb.className = `mt-4 p-3 rounded-md font-medium ${colorClasses}`; 
+            fb.classList.remove('hidden');
+            setTimeout(() => fb.classList.add('hidden'), 3000);
+        }
+
+        function deleteLead(buttonElement) {
+            const entryToDelete = buttonElement.closest('li');
+
+            entryToDelete.style.opacity = '0';
+            setTimeout(() => {
+                entryToDelete.remove();
+
+                const list = document.getElementById('leadList');
+                if (list.children.length === 0) {
+                    document.getElementById('noLeadsHint').classList.remove('hidden');
+                }
+            }, 300);
+        }
+
+    </script>
+</body>
+</html>
